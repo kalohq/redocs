@@ -19,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/lystable/redocs/issues"
   },
-  "homepage": "https://github.com/lystable/redocs"
+  "homepage": "https://github.com/lystable/redocs",
+  "dependencies": {
+    "react": "^0.13.3",
+    "react-component-tree": "^0.2.4",
+    "react-docgen": "^2.1.2"
+  }
 }

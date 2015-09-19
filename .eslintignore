@@ -1,0 +1,4 @@
+node_modules/
+
+# Ignore src for now just because it's written in es5 for node
+src/
