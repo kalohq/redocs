@@ -82,3 +82,8 @@ Generate a static web app:
 #### Step 3: Output
 
 1. Output to `/docs` by default or user-defined
+
+License
+-------
+
+Apache 2.0
