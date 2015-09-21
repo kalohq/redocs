@@ -26,6 +26,8 @@ Goals
   - component directory readme.md support
 - IDE workflow pluggable
   - "jump to documentation from usage"
+- Dev environment pluggable
+  - ctrl+click component to "jump to documentation"
 - No restrictions on environment/workflow
   - Customize where/how to find requirements
 
