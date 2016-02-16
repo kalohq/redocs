@@ -14,7 +14,7 @@ Goals
 -----
 
 - One-command results (no need for extra code or config to get going)
-- Fixture powered (ComponentTree ???)
+- ComponentFixture powered (ComponentTree ???)
   - Auto-generated default fixtures
   - JS exported fixtures
 - Can read dependencies to give idea of make-up
@@ -30,6 +30,7 @@ Goals
   - ctrl+click component to "jump to documentation"
 - No restrictions on environment/workflow
   - Customize where/how to find requirements
+- ComponentFixtures nesting other components
 
 User config
 -----------
