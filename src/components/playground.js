@@ -69,7 +69,7 @@ const Separator = () => (
 );
 
 /** Render a single component fixture */
-const RawFixture = ({fixture: {component: FixtureComponent, src, description}, setMode, mode, ...otherProps}) => (
+const _Fixture = ({fixture: {component: FixtureComponent, src, description}, setMode, mode, ...otherProps}) => (
   <Block id={`component_fixture_${getDisplayName(FixtureComponent)}`} {...otherProps}>
     <Flex alignItems="center" justifyContent="space-between">
       <Heading level={4}>
@@ -102,7 +102,7 @@ const Fixture = withState(
   'mode',
   'setMode',
   'preview',
-  RawFixture
+  _Fixture
 );
 
 

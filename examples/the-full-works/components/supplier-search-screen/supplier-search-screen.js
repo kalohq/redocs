@@ -1,4 +1,5 @@
 import React from 'react';
+import {withState} from 'recompose';
 
 import SearchBar from '../search-bar/search-bar';
 
@@ -12,7 +13,7 @@ type Props = {
 };
 
 /** Screen for searching and displaying suppliers */
-const SupplierSearchScreen = ({searchQuery, onSearch, results, ...props}: Props): ReactElement => (
+const _SupplierSearchScreen = ({searchQuery, onSearch, results, ...props}: Props): ReactElement => (
   <div {...props}>
     <SearchBar searchQuery={searchQuery} onSearch={onSearch} />
     <ul>
@@ -20,5 +21,12 @@ const SupplierSearchScreen = ({searchQuery, onSearch, results, ...props}: Props)
     </ul>
   </div>
 );
+
+/** Contained */
+const SupplierSearchScreen = withState(
+  'test',
+  'setTest',
+  false
+)(_SupplierSearchScreen);
 
 export default SupplierSearchScreen;
