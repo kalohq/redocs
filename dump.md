@@ -46,10 +46,10 @@ Place to save crazy ideas for future of redocs and all related stuff.
 
 Trying to define a reasonable scope here...
 
-> "An intelligent pipeline for generating UI-Component documentation"
+> "An tool for generating intelligent UI-Component documentation"
 
 - Intelligent pipeline for resolving component documentation
-- Playground for rendering component documentation
+- Component framework for rendering component documentation
 
 > "Every step should be pluggable"
 
