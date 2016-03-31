@@ -48,7 +48,7 @@ Place to save crazy ideas for future of redocs and all related stuff.
 - SO. MANY. PARSERS. SO. MANY. TRAVERSALS. SO. MANY. MUTATIONS!!!
 - I remember iconic framework doing a lot of cool stuff with their framework/devtools
 - One of the biggest selling points of redocs came when updating the underlying (root) primitive components across our app.
-  - Nightmare to go trawl through and find any potential visual regressions
+  - Nightmare to trawl through and find any potential visual regressions
 
 
 ### Alternatives
@@ -77,9 +77,9 @@ Trying to define a reasonable scope here...
 
 So looking back at "alternatives"
 
-- react-styleguidist - we can provide more intelligent resolution of
-- Atellier
-- Storybook - we can power
+- react-styleguidist - we can provide more intelligent resolution of data
+- Atellier - Same as above
+- Storybook - we can power extra resolution of data and provide story component info
 - Others???
 
 ### Vision Beyond
@@ -87,7 +87,6 @@ So looking back at "alternatives"
 > The long term vision is becoming (using redocs as a base) a workflow tool to bridge the design-development gap, improve engineering efficiency and provide an optimum environment for rapid product development.
 
 - Consider how this works in a world without React
-
 
 ### Notes for contributing
 
