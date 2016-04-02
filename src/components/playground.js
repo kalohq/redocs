@@ -2,7 +2,7 @@ import React from 'react';
 import {getDisplayName} from '../utils/react';
 import {Flex, Block, Inline} from './core';
 import {rgb} from 'jsxstyle';
-import escape from 'lodash/fp/escape';
+import {escape} from 'lodash';
 import {withState} from 'recompose';
 
 const TRANSPARENT_BG = 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAIElEQVQYV2NkYGCQZMAEz9GFGIeIQix+wfQgyDODXSEANN4FiOUn0M8AAAAASUVORK5CYII=) repeat'; // eslint-disable-line max-len

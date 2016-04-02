@@ -17,7 +17,6 @@
     "max-len": [2, 140],
     "flow-vars/define-flow-type": 1,
     "flow-vars/use-flow-type": 1,
-    "no-implicit-side-effects/no-implicit-side-effects": 2,
     "spaced-comment": 0
   }
 }

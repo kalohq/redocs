@@ -29,4 +29,4 @@ const SupplierSearchScreen = withState(
   false
 )(_SupplierSearchScreen);
 
-export default SupplierSearchScreen;
+export default _SupplierSearchScreen;

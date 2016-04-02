@@ -19,5 +19,9 @@
     "babel-loader": "^6.2.4",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "babel-core": "^6.7.4",
+    "babylon": "^6.7.0"
   }
 }

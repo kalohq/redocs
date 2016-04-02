@@ -18,7 +18,7 @@ module.exports = {
   devtool: 'cheap-eval-source-map',
   module: {
     loaders: [
-      {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
+      {test: /\.js$/, loader: 'babel', exclude: /node_modules|(redocs\/lib)/},
       {test: /\-fixture\.js$/, loader: 'babel!redocs/lib/webpack/manifest-loader', exclude: /node_modules/},
     ]
   },

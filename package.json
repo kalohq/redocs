@@ -39,10 +39,10 @@
     "eslint-config-airbnb": "5.0.0",
     "eslint-config-lystable": "3.0.1",
     "eslint-plugin-flow-vars": "^0.2.1",
-    "eslint-plugin-no-implicit-side-effects": "^1.0.0",
     "eslint-plugin-react": "3.14.0"
   },
   "dependencies": {
+    "babel-core": "^6.7.4",
     "babel-generator": "^6.7.2",
     "babel-traverse": "^6.7.4",
     "babel-types": "^6.7.2",

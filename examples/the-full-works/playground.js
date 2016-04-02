@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {Playground} from 'redocs';
+import Playground from 'redocs/lib/components/playground';
 
 const reqManifests = require.context('./components', true, MATCH_COMPONENTS);
 const componentManifests = reqManifests.keys().map(reqManifests)
@@ -14,4 +14,4 @@ const playground = (
   <Playground manifests={componentManifests} />
 );
 
-void (ReactDOM.render(playground, document.getElementById('app')));
+ReactDOM.render(playground, document.getElementById('app'));
