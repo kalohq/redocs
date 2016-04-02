@@ -14,5 +14,10 @@
     "react"
   ],
   "author": "Chris Pearce <hello@chrispearce.me>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "babel-loader": "^6.2.4",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
+  }
 }

@@ -19,7 +19,7 @@ module.exports = {
   module: {
     loaders: [
       {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-      {test: /\-fixture\.js$/, loader: 'babel!redocs/src/webpack/manifest-loader', exclude: /node_modules/},
+      {test: /\-fixture\.js$/, loader: 'babel!redocs/lib/webpack/manifest-loader', exclude: /node_modules/},
     ]
   },
   plugins: [

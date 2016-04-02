@@ -71,7 +71,11 @@ module.exports = function loadManifest(originalSource) {
 
   var componentSource = resolveComponent(componentPath, function(err, resolvedComponentPath) {
     fs.readFile(resolvedComponentPath, function(err, fileBuffer) {
-      var docs = ReactDocgen.parse(fileBuffer.toString());
+      try {
+        var docs = ReactDocgen.parse(fileBuffer.toString());
+      } catch (err) {
+        throw new Error(`${err.message} <${resolvedComponentPath}>`);
+      }
       var newProperty = t.objectProperty(t.stringLiteral('docs'), t.stringLiteral(JSON.stringify(docs, null, 2)));
       manifest.node.declaration.properties.push(newProperty);
 

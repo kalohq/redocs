@@ -7,7 +7,7 @@
 [include]
 
 [libs]
-decl/
+flow/
 
 [options]
 
