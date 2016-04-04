@@ -128,6 +128,24 @@ describe('utils/resolver', () => {
       expect(definition.definition.node.init.value).toBe('I\'m here!');
     });
 
+    it('should resolve cross-file VariableDeclaration via recursive imports with named intermediate modules', () => {
+      const module = absTestModule('./resolver-cross-file-VariableDeclaration-recursive-named/entry.js');
+      const nodePath = getTestReference(module);
+      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+
+      expect(T.isStringLiteral(definition.definition.node.init)).toBe(true);
+      expect(definition.definition.node.init.value).toBe('I\'m here!');
+    });
+
+    it('should resolve cross-file VariableDeclaration via recursive imports with named default intermediate modules', () => {
+      const module = absTestModule('./resolver-cross-file-VariableDeclaration-recursive-named-default/entry.js');
+      const nodePath = getTestReference(module);
+      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+
+      expect(T.isStringLiteral(definition.definition.node.init)).toBe(true);
+      expect(definition.definition.node.init.value).toBe('I\'m here!');
+    });
+
   });
 
   describe('resolveRootComponentDefinition', () => {

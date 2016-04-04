@@ -3,8 +3,8 @@ import traverse from 'babel-traverse';
 
 // TODO: Will need to think hard about how to improve the apis seen here (pluggability)
 
-/** Given a module ast get reference to the default export identifier path */
-function getDefaultExportIdentifier(moduleAst) {
+/** Given a module ast get reference to the default export path */
+function getDefaultExportPath(moduleAst) {
   let identifierPath;
 
   traverse(moduleAst, {
@@ -14,25 +14,56 @@ function getDefaultExportIdentifier(moduleAst) {
           identifierPath = identifierNodePath;
         }
       });
+    },
+    ExportSpecifier(nodePath) {
+      if (
+        !identifierPath
+        && nodePath.node.exported.name === 'default'
+        && T.isExportNamedDeclaration(nodePath.parentPath.node)
+        && nodePath.parentPath.node.source
+      ) {
+        identifierPath = nodePath;
+      }
     }
   });
 
   return identifierPath;
 }
 
-/** Given a module ast get reference to a specific export identifier path */
-function getExportIdentifier(name, moduleAst) {
+/** Given a module ast get reference to a specific export path */
+function getExportPath(name, moduleAst) {
+  if (name === 'default') {
+    return getDefaultExportPath(moduleAst);
+  }
+
   let identifierPath;
+
+  const specifierVisitor = {
+    ExportSpecifier(nodePath) {
+      if (
+        !identifierPath
+        && nodePath.node.exported.name === name
+      ) {
+        identifierPath = nodePath;
+      }
+    }
+  };
+
+  const identifierVisitor = {
+    Identifier(identifierNodePath) {
+      if (!identifierPath && identifierNodePath.node.name === name) {
+        identifierPath = identifierNodePath;
+      }
+    }
+  };
 
   traverse(moduleAst, {
     ExportNamedDeclaration(nodePath) {
-      nodePath.traverse({
-        Identifier(identifierNodePath) {
-          if (identifierNodePath.node.name === name) {
-            identifierPath = identifierNodePath;
-          }
-        }
-      });
+      if (!identifierPath && nodePath.node.specifiers.length) {
+        nodePath.traverse(specifierVisitor);
+      } else {
+        nodePath.traverse(identifierVisitor);
+      }
     }
   });
 
@@ -43,9 +74,22 @@ function getExportIdentifier(name, moduleAst) {
  * Given a path resolve it's definition which may be found in other modules.
  * Ie. This is not resolving the binding within the bounds of a module but will
  * also resolve imports to find the very root definition.
+ *
+ * Note: nodePath could be an Identifier path OR ExportSpecifier path
  */
-export function resolveDefinition(module, identifierPath, resolveModule) {
-  const binding = identifierPath.scope.getBinding(identifierPath.node.name);
+export function resolveDefinition(module, nodePath, resolveModule) {
+  // export {definition as definition} from 'other-module';
+  if (T.isExportSpecifier(nodePath.node) && nodePath.parent.source) {
+    const importModulePath = nodePath.parent.source.value;
+    const importedModule = resolveModule(module, importModulePath);
+    const identifier = getExportPath(nodePath.node.local.name, importedModule.ast);
+
+    return resolveDefinition(importedModule.path, identifier, resolveModule);
+  }
+
+  const binding = T.isExportSpecifier(nodePath.node)
+    ? nodePath.scope.getBinding(nodePath.node.local.name)
+    : nodePath.scope.getBinding(nodePath.node.name);
 
   // const definition = 'foo';
   if (T.isVariableDeclarator(binding.path.node)) {
@@ -71,7 +115,7 @@ export function resolveDefinition(module, identifierPath, resolveModule) {
   if (T.isImportSpecifier(binding.path.node)) {
     const importModulePath = binding.path.parent.source.value;
     const importedModule = resolveModule(module, importModulePath);
-    const identifier = getExportIdentifier(binding.path.node.imported.name, importedModule.ast);
+    const identifier = getExportPath(binding.path.node.imported.name, importedModule.ast);
 
     return resolveDefinition(importedModule.path, identifier, resolveModule);
   }
@@ -80,7 +124,7 @@ export function resolveDefinition(module, identifierPath, resolveModule) {
   if (T.isImportDefaultSpecifier(binding.path.node)) {
     const importModulePath = binding.path.parent.source.value;
     const importedModule = resolveModule(module, importModulePath);
-    const identifier = getDefaultExportIdentifier(importedModule.ast);
+    const identifier = getDefaultExportPath(importedModule.ast);
 
     return resolveDefinition(importedModule.path, identifier, resolveModule);
   }
@@ -100,7 +144,7 @@ export function resolveDefinition(module, identifierPath, resolveModule) {
  *   createContainer(MyComponent, {});
  *   etc.
  */
-export function resolveRootComponentDefinition(identifierPath, resolveFile) {
+export function resolveRootComponentDefinition(nodePath, resolveFile) {
 
 }
 
