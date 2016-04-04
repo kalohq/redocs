@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint examples/** src/**",
-    "test": "npm run typecheck && npm run lint",
+    "test": "npm run lint && mocha lib/**/*.test.js",
     "typecheck": "flow check --all",
     "docs": "react-docgen examples/ --pretty -o ./test.json",
     "build": "babel src/ -d lib/ --source-maps",
@@ -39,7 +39,9 @@
     "eslint-config-airbnb": "5.0.0",
     "eslint-config-lystable": "3.0.1",
     "eslint-plugin-flow-vars": "^0.2.1",
-    "eslint-plugin-react": "3.14.0"
+    "eslint-plugin-react": "3.14.0",
+    "expect": "^1.16.0",
+    "mocha": "^2.4.5"
   },
   "dependencies": {
     "babel-core": "^6.7.4",

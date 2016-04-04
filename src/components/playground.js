@@ -1,5 +1,5 @@
 import React from 'react';
-import {getDisplayName} from '../utils/react';
+import {getDisplayName} from '../utils/runtime/react';
 import {Flex, Block, Inline} from './core';
 import {rgb} from 'jsxstyle';
 import {escape} from 'lodash';

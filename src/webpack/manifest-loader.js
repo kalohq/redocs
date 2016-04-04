@@ -68,11 +68,15 @@ function loadManifest(originalSource) {
   resolveComponent(componentPath, (resolveErr, resolvedComponentPath) => {
     fs.readFile(resolvedComponentPath, (readErr, fileBuffer) => {
       try {
+        // TODO: May be worth writing a modern version of docgen which uses a babel-tree?
+        // SEE: https://github.com/reactjs/react-docgen/issues/68
         const docs = ReactDocgen.parse(fileBuffer.toString());
         const newProperty = t.objectProperty(t.stringLiteral('docs'), t.stringLiteral(JSON.stringify(docs, null, 2)));
         manifest.node.declaration.properties.push(newProperty);
       } catch (err) {
-        throw new Error(`${err.message} <${resolvedComponentPath}>`);
+        this.emitWarning(`${err.message} <${resolvedComponentPath}>`);
+        const newProperty = t.objectProperty(t.stringLiteral('docs'), t.stringLiteral(JSON.stringify({error: true}, null, 2)));
+        manifest.node.declaration.properties.push(newProperty);
       }
 
       callback(null, generate(ast, null, originalSource).code);
