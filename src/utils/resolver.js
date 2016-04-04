@@ -92,21 +92,15 @@ export function resolveDefinition(module, nodePath, resolveModule) {
     : nodePath.scope.getBinding(nodePath.node.name);
 
   // const definition = 'foo';
-  if (T.isVariableDeclarator(binding.path.node)) {
-    const definition = binding.path;
-    return {
-      binding,
-      definition,
-      module
-    };
-  }
-
   // function definition() {};
-  if (T.isFunctionDeclaration(binding.path.node)) {
-    const definition = binding.path;
+  // class Definition {}
+  if (
+    T.isVariableDeclarator(binding.path.node)
+    || T.isFunctionDeclaration(binding.path.node)
+    || T.isClassDeclaration(binding.path.node)
+  ) {
     return {
       binding,
-      definition,
       module
     };
   }
@@ -131,8 +125,7 @@ export function resolveDefinition(module, nodePath, resolveModule) {
 
   // ¯\_(ツ)_/¯
   return {
-    failed: true,
-    module
+    failed: true
   };
 
 }
