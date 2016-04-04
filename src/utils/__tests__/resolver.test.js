@@ -41,7 +41,7 @@ function readModule(modulePath) {
   return fs.readFileSync(modulePath, {encoding: 'utf8'});
 }
 
-function getTestReference(testModulePath, exportName) {
+function getTestReference(testModulePath) {
   const module = readModule(testModulePath);
   const ast = parseModule(module);
 
@@ -59,13 +59,7 @@ function getTestReference(testModulePath, exportName) {
     }
   };
 
-  const exportVisitor = {
-    ExportDeclaration(nodePath) {
-      nodePath.traverse(extractExportIdentifierVisitor);
-    }
-  };
-
-  traverse(ast, exportName ? exportVisitor : defaultExportVisitor);
+  traverse(ast, defaultExportVisitor);
 
   return testIdentifierPath;
 }
@@ -77,7 +71,7 @@ describe('utils/resolver', () => {
     it('should resolve same-file VariableDeclaration', () => {
       const module = absTestModule('./resolver-same-file-VariableDeclaration/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath);
+      const definition = Resolver.resolveDefinition(nodePath, module);
 
       expect(T.isStringLiteral(definition.binding.path.node.init)).toBe(true);
       expect(definition.binding.path.node.init.value).toBe('I\'m here!');
@@ -86,7 +80,7 @@ describe('utils/resolver', () => {
     it('should resolve same-file FunctionDeclaration', () => {
       const module = absTestModule('./resolver-same-file-FunctionDeclaration/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath);
+      const definition = Resolver.resolveDefinition(nodePath, module);
 
       expect(T.isFunctionDeclaration(definition.binding.path.node)).toBe(true);
       expect(definition.binding.path.node.params[0].name).toBe('firstParam');
@@ -95,7 +89,7 @@ describe('utils/resolver', () => {
     it('should resolve cross-file VariableDeclaration', () => {
       const module = absTestModule('./resolver-cross-file-VariableDeclaration/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+      const definition = Resolver.resolveDefinition(nodePath, module, resolveModule);
 
       expect(T.isStringLiteral(definition.binding.path.node.init)).toBe(true);
       expect(definition.binding.path.node.init.value).toBe('I\'m here!');
@@ -104,7 +98,7 @@ describe('utils/resolver', () => {
     it('should resolve cross-file FunctionDeclaration', () => {
       const module = absTestModule('./resolver-cross-file-FunctionDeclaration/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+      const definition = Resolver.resolveDefinition(nodePath, module, resolveModule);
 
       expect(T.isFunctionDeclaration(definition.binding.path.node)).toBe(true);
       expect(definition.binding.path.node.params[0].name).toBe('firstParam');
@@ -113,7 +107,7 @@ describe('utils/resolver', () => {
     it('should resolve cross-file VariableDeclaration via named imports', () => {
       const module = absTestModule('./resolver-cross-file-VariableDeclaration-named/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+      const definition = Resolver.resolveDefinition(nodePath, module, resolveModule);
 
       expect(T.isStringLiteral(definition.binding.path.node.init)).toBe(true);
       expect(definition.binding.path.node.init.value).toBe('I\'m here!');
@@ -122,7 +116,7 @@ describe('utils/resolver', () => {
     it('should resolve cross-file VariableDeclaration via recursive imports', () => {
       const module = absTestModule('./resolver-cross-file-VariableDeclaration-recursive/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+      const definition = Resolver.resolveDefinition(nodePath, module, resolveModule);
 
       expect(T.isStringLiteral(definition.binding.path.node.init)).toBe(true);
       expect(definition.binding.path.node.init.value).toBe('I\'m here!');
@@ -131,7 +125,7 @@ describe('utils/resolver', () => {
     it('should resolve cross-file VariableDeclaration via recursive imports with named intermediate modules', () => {
       const module = absTestModule('./resolver-cross-file-VariableDeclaration-recursive-named/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+      const definition = Resolver.resolveDefinition(nodePath, module, resolveModule);
 
       expect(T.isStringLiteral(definition.binding.path.node.init)).toBe(true);
       expect(definition.binding.path.node.init.value).toBe('I\'m here!');
@@ -140,7 +134,7 @@ describe('utils/resolver', () => {
     it('should resolve cross-file VariableDeclaration via recursive imports with named default intermediate modules', () => {
       const module = absTestModule('./resolver-cross-file-VariableDeclaration-recursive-named-default/entry.js');
       const nodePath = getTestReference(module);
-      const definition = Resolver.resolveDefinition(module, nodePath, resolveModule);
+      const definition = Resolver.resolveDefinition(nodePath, module, resolveModule);
 
       expect(T.isStringLiteral(definition.binding.path.node.init)).toBe(true);
       expect(definition.binding.path.node.init.value).toBe('I\'m here!');

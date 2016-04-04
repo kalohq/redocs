@@ -49,6 +49,7 @@ Place to save crazy ideas for future of redocs and all related stuff.
 - I remember iconic framework doing a lot of cool stuff with their framework/devtools
 - One of the biggest selling points of redocs came when updating the underlying (root) primitive components across our app.
   - Nightmare to trawl through and find any potential visual regressions
+- Some pragmas and docblocks might aid in some edge cases?
 
 
 ### Alternatives

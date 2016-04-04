@@ -68,19 +68,27 @@ function getExportPath(name, moduleAst) {
  * Note: nodePath should be an Identifier path OR ExportSpecifier path within
  *       the scope of the specified module
  */
-export function resolveDefinition(module, nodePath, resolveModule) {
+export function resolveDefinition(nodePath, module, resolveModule) {
   // export {definition as definition} from 'other-module';
   if (T.isExportSpecifier(nodePath.node) && nodePath.parent.source) {
+    if (!resolveModule) {
+      return {failed: true};
+    }
+
     const importModulePath = nodePath.parent.source.value;
     const importedModule = resolveModule(module, importModulePath);
     const identifier = getExportPath(nodePath.node.local.name, importedModule.ast);
 
-    return resolveDefinition(importedModule.path, identifier, resolveModule);
+    return resolveDefinition(identifier, importedModule.path, resolveModule);
   }
 
   const binding = T.isExportSpecifier(nodePath.node)
     ? nodePath.scope.getBinding(nodePath.node.local.name)
     : nodePath.scope.getBinding(nodePath.node.name);
+
+  if (!binding) {
+    return {failed: true};
+  }
 
   // const definition = 'foo';
   // function definition() {};
@@ -98,20 +106,28 @@ export function resolveDefinition(module, nodePath, resolveModule) {
 
   // import {definition} from './other-module';
   if (T.isImportSpecifier(binding.path.node)) {
+    if (!resolveModule) {
+      return {failed: true};
+    }
+
     const importModulePath = binding.path.parent.source.value;
     const importedModule = resolveModule(module, importModulePath);
     const identifier = getExportPath(binding.path.node.imported.name, importedModule.ast);
 
-    return resolveDefinition(importedModule.path, identifier, resolveModule);
+    return resolveDefinition(identifier, importedModule.path, resolveModule);
   }
 
   // import definition from './other-module';
   if (T.isImportDefaultSpecifier(binding.path.node)) {
+    if (!resolveModule) {
+      return {failed: true};
+    }
+
     const importModulePath = binding.path.parent.source.value;
     const importedModule = resolveModule(module, importModulePath);
     const identifier = getExportPath('default', importedModule.ast);
 
-    return resolveDefinition(importedModule.path, identifier, resolveModule);
+    return resolveDefinition(identifier, importedModule.path, resolveModule);
   }
 
   // ¯\_(ツ)_/¯
@@ -119,22 +135,4 @@ export function resolveDefinition(module, nodePath, resolveModule) {
     failed: true
   };
 
-}
-
-/**
- * Like resolveDefinition but will attempt to resolve components through facades.
- * Eg.
- *   withState(MyComponent);
- *   createContainer(MyComponent, {});
- *   etc.
- */
-export function resolveRootComponentDefinition(nodePath, resolveFile) {
-
-}
-
-/**
- * Resolve a component definition taking into account facades and composiiton
- */
-export function resolveComponentDefinition() {
-  // TODO: Implement
 }
