@@ -22,19 +22,19 @@ function loadManifest(originalSource) {
   const resolveComponent = this.resolve.bind(this, this.context);
 
   traverse(ast, {
-    ExportDefaultDeclaration(nodePath) {
+    ExportDefaultDeclaration(path) {
       // default export is considered the component manifest
-      manifest = nodePath;
+      manifest = path;
 
       // find a reference to our main component this manifest is defining
       const componentVar = manifest.node.declaration.properties.find(
         property => property.key.name === 'component'
       ).value.name;
       // assuming our component reference is an import...
-      componentPath = nodePath.scope.getBinding(componentVar).path.parent.source.value;
+      componentPath = path.scope.getBinding(componentVar).path.parent.source.value;
 
       // lets find our fixtures and store the source along with fixture ref
-      nodePath.traverse({
+      path.traverse({
         Property(manifestPropNodePath) {
           if (manifestPropNodePath.node.key.name === 'fixtures') {
             // find each identifier (fixture reference)

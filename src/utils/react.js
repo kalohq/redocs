@@ -20,21 +20,21 @@ function containsJSX(path) {
 }
 
 /** Is given path a react component declaration? */
-export function isReactComponent(nodePath) {
-  if (T.isClassDeclaration(nodePath)) {
-    return !!find(nodePath.node.body.body, node => T.isClassMethod(node) && node.key.name === 'render');
+export function isReactComponent(path) {
+  if (T.isClassDeclaration(path)) {
+    return !!find(path.node.body.body, node => T.isClassMethod(node) && node.key.name === 'render');
   }
 
-  if (T.isFunctionDeclaration(nodePath)) {
-    return containsJSX(nodePath.get('body'));
+  if (T.isFunctionDeclaration(path)) {
+    return containsJSX(path.get('body'));
   }
 
-  if (T.isVariableDeclarator(nodePath) && T.isFunctionExpression(nodePath.node.init)) {
-    return containsJSX(nodePath.get('init').get('body'));
+  if (T.isVariableDeclarator(path) && T.isFunctionExpression(path.node.init)) {
+    return containsJSX(path.get('init').get('body'));
   }
 
-  if (T.isVariableDeclarator(nodePath) && T.isArrowFunctionExpression(nodePath.node.init)) {
-    return containsJSX(nodePath.get('init').get('body'));
+  if (T.isVariableDeclarator(path) && T.isArrowFunctionExpression(path.node.init)) {
+    return containsJSX(path.get('init').get('body'));
   }
 
   return false;

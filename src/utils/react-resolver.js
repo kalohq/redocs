@@ -16,8 +16,8 @@ import * as T from 'babel-types';
  *       every need but does ours for now.
  *
  */
-export function resolveRootComponentDefinition(nodePath, module, resolveFile) {
-  const definition = Resolver.resolveDefinition(nodePath, module, resolveFile);
+export function resolveRootComponentDefinition(path, module, resolveFile) {
+  const definition = Resolver.resolveDefinition(path, module, resolveFile);
 
   if (ReactUtils.isReactComponent(definition.binding.path)) {
     return definition;

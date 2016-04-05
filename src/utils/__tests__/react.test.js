@@ -18,9 +18,9 @@ function parse(type, code) {
   });
 
   traverse(ast, {
-    [type]: function find(nodePath) {
-      first = nodePath;
-      nodePath.stop();
+    [type]: function find(path) {
+      first = path;
+      path.stop();
     }
   });
 
@@ -32,23 +32,23 @@ describe('utils/react', () => {
   describe('isReactComponent', () => {
 
     it('should give the correct answer', () => {
-      const nodePathA = parse('ClassDeclaration', `class MyComponent {
+      const pathA = parse('ClassDeclaration', `class MyComponent {
         render() {}
       }`);
-      expect(ReactUtils.isReactComponent(nodePathA)).toBe(true);
+      expect(ReactUtils.isReactComponent(pathA)).toBe(true);
 
-      const nodePathB = parse('FunctionDeclaration', `function MyComponent() {
+      const pathB = parse('FunctionDeclaration', `function MyComponent() {
         return <div>Test</div>;
       }`);
-      expect(ReactUtils.isReactComponent(nodePathB)).toBe(true);
+      expect(ReactUtils.isReactComponent(pathB)).toBe(true);
 
-      const nodePathC = parse('VariableDeclarator', `const MyComponent = function() {
+      const pathC = parse('VariableDeclarator', `const MyComponent = function() {
         return <div>Test</div>;
       }`);
-      expect(ReactUtils.isReactComponent(nodePathC)).toBe(true);
+      expect(ReactUtils.isReactComponent(pathC)).toBe(true);
 
-      const nodePathD = parse('VariableDeclarator', `const MyComponent = () => <div>Test</div>;`);
-      expect(ReactUtils.isReactComponent(nodePathD)).toBe(true);
+      const pathD = parse('VariableDeclarator', `const MyComponent = () => <div>Test</div>;`);
+      expect(ReactUtils.isReactComponent(pathD)).toBe(true);
     });
 
   });

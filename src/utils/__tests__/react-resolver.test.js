@@ -54,8 +54,8 @@ function getTestReference(testModulePath) {
   };
 
   const defaultExportVisitor = {
-    ExportDefaultDeclaration(nodePath) {
-      nodePath.traverse(extractExportIdentifierVisitor);
+    ExportDefaultDeclaration(path) {
+      path.traverse(extractExportIdentifierVisitor);
     }
   };
 
@@ -70,8 +70,8 @@ describe('utils/react-resolver', () => {
 
     it('should resolve same-file VariableDeclaration', () => {
       const module = absTestModule('./react-resolver-same-file-VariableDeclaration/entry.js');
-      const nodePath = getTestReference(module);
-      const definition = ReactResolver.resolveRootComponentDefinition(nodePath, module);
+      const path = getTestReference(module);
+      const definition = ReactResolver.resolveRootComponentDefinition(path, module);
 
       expect(T.isVariableDeclarator(definition.binding.path)).toBe(true);
       expect(T.isArrowFunctionExpression(definition.binding.path.node.init)).toBe(true);
@@ -80,8 +80,8 @@ describe('utils/react-resolver', () => {
 
     it('should resolve same-file FunctionDeclaration', () => {
       const module = absTestModule('./react-resolver-same-file-FunctionDeclaration/entry.js');
-      const nodePath = getTestReference(module);
-      const definition = ReactResolver.resolveRootComponentDefinition(nodePath, module);
+      const path = getTestReference(module);
+      const definition = ReactResolver.resolveRootComponentDefinition(path, module);
 
       expect(T.isFunctionDeclaration(definition.binding.path)).toBe(true);
       expect(definition.binding.path.node.id.name).toBe('Definition');
@@ -89,8 +89,8 @@ describe('utils/react-resolver', () => {
 
     it('should resolve same-file VariableDeclaration through a facade', () => {
       const module = absTestModule('./react-resolver-same-file-VariableDeclaration-facade/entry.js');
-      const nodePath = getTestReference(module);
-      const definition = ReactResolver.resolveRootComponentDefinition(nodePath, module);
+      const path = getTestReference(module);
+      const definition = ReactResolver.resolveRootComponentDefinition(path, module);
 
       expect(T.isVariableDeclarator(definition.binding.path)).toBe(true);
       expect(T.isArrowFunctionExpression(definition.binding.path.node.init)).toBe(true);
@@ -99,8 +99,8 @@ describe('utils/react-resolver', () => {
 
     it('should resolve cross-file VariableDeclaration recursively through named exports and a facade', () => {
       const module = absTestModule('./react-resolver-cross-file-VariableDeclaration-recursive-named-facade/entry.js');
-      const nodePath = getTestReference(module);
-      const definition = ReactResolver.resolveRootComponentDefinition(nodePath, module, resolveModule);
+      const path = getTestReference(module);
+      const definition = ReactResolver.resolveRootComponentDefinition(path, module, resolveModule);
 
       expect(T.isVariableDeclarator(definition.binding.path)).toBe(true);
       expect(T.isArrowFunctionExpression(definition.binding.path.node.init)).toBe(true);

@@ -12,8 +12,8 @@ function getExportPath(name, moduleAst) {
 
   // Find `export default definition;`
   const defaultVisitor = {
-    ExportDefaultDeclaration(nodePath) {
-      nodePath.traverse({
+    ExportDefaultDeclaration(path) {
+      path.traverse({
         Identifier(identifierNodePath) {
           identifierPath = identifierNodePath;
         }
@@ -27,9 +27,9 @@ function getExportPath(name, moduleAst) {
 
   // Find appropriate specifier in `export {foo as bar};`
   const specifierVisitor = {
-    ExportSpecifier(nodePath) {
-      if (nodePath.node.exported.name === name) {
-        identifierPath = nodePath;
+    ExportSpecifier(path) {
+      if (path.node.exported.name === name) {
+        identifierPath = path;
       }
     }
   };
@@ -44,12 +44,12 @@ function getExportPath(name, moduleAst) {
   };
 
   const namedVisitor = {
-    ExportNamedDeclaration(nodePath) {
+    ExportNamedDeclaration(path) {
       if (!identifierPath) {
-        if (nodePath.node.specifiers.length) {
-          nodePath.traverse(specifierVisitor);
+        if (path.node.specifiers.length) {
+          path.traverse(specifierVisitor);
         } else {
-          nodePath.traverse(identifierVisitor);
+          path.traverse(identifierVisitor);
         }
       }
     }
@@ -65,29 +65,29 @@ function getExportPath(name, moduleAst) {
  * Ie. This is not resolving the binding within the bounds of a module but will
  * also resolve imports to find the very root definition.
  *
- * Note: nodePath should be an Identifier path OR ExportSpecifier path within
+ * Note: path should be an Identifier path OR ExportSpecifier path within
  *       the scope of the specified module
  */
-export function resolveDefinition(nodePath, module, resolveModule) {
+export function resolveDefinition(path, module, resolveModule) {
   // export {definition as definition} from 'other-module';
-  if (T.isExportSpecifier(nodePath.node) && nodePath.parent.source) {
+  if (T.isExportSpecifier(path.node) && path.parent.source) {
     if (!resolveModule) {
-      return {failed: true};
+      return {failed: true, module, path};
     }
 
-    const importModulePath = nodePath.parent.source.value;
+    const importModulePath = path.parent.source.value;
     const importedModule = resolveModule(module, importModulePath);
-    const identifier = getExportPath(nodePath.node.local.name, importedModule.ast);
+    const identifier = getExportPath(path.node.local.name, importedModule.ast);
 
     return resolveDefinition(identifier, importedModule.path, resolveModule);
   }
 
-  const binding = T.isExportSpecifier(nodePath.node)
-    ? nodePath.scope.getBinding(nodePath.node.local.name)
-    : nodePath.scope.getBinding(nodePath.node.name);
+  const binding = T.isExportSpecifier(path.node)
+    ? path.scope.getBinding(path.node.local.name)
+    : path.scope.getBinding(path.node.name);
 
   if (!binding) {
-    return {failed: true};
+    return {failed: true, module, path};
   }
 
   // const definition = 'foo';
@@ -107,7 +107,7 @@ export function resolveDefinition(nodePath, module, resolveModule) {
   // import {definition} from './other-module';
   if (T.isImportSpecifier(binding.path.node)) {
     if (!resolveModule) {
-      return {failed: true};
+      return {failed: true, module, path};
     }
 
     const importModulePath = binding.path.parent.source.value;
@@ -120,7 +120,7 @@ export function resolveDefinition(nodePath, module, resolveModule) {
   // import definition from './other-module';
   if (T.isImportDefaultSpecifier(binding.path.node)) {
     if (!resolveModule) {
-      return {failed: true};
+      return {failed: true, module, path};
     }
 
     const importModulePath = binding.path.parent.source.value;
@@ -132,7 +132,9 @@ export function resolveDefinition(nodePath, module, resolveModule) {
 
   // ¯\_(ツ)_/¯
   return {
-    failed: true
+    failed: true,
+    module,
+    path
   };
 
 }
