@@ -10,9 +10,10 @@ import * as T from 'babel-types';
  *   const MyStatefulComponent = withState(MyComponent);
  *   export default MyStatefulComponent;
  *
- * Note: We will only resolve these within the same module for now otherwise it
+ * Note: We will only resolve these within the SAME module for now otherwise it
  *       would become ridiculously expensive to trawl all possible Identifiers
- *       through all of their file declarations.
+ *       through all of their file declarations. This obviously won't fulfil
+ *       every need but does ours for now.
  *
  */
 export function resolveRootComponentDefinition(nodePath, module, resolveFile) {
@@ -26,6 +27,7 @@ export function resolveRootComponentDefinition(nodePath, module, resolveFile) {
   if (T.isCallExpression(definition.binding.path.node.init)) {
     let foundDefinition;
 
+    // Search through identifier definitions till we find a react component
     const referenceVisitor = {
       Identifier(identifierPath) {
         const nextDefinition = Resolver.resolveDefinition(identifierPath, module);
