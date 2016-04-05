@@ -97,6 +97,16 @@ describe('utils/react-resolver', () => {
       expect(T.isJSXElement(definition.binding.path.node.init.body)).toBe(true);
     });
 
+    it('should resolve cross-file VariableDeclaration recursively through named exports and a facade', () => {
+      const module = absTestModule('./react-resolver-cross-file-VariableDeclaration-recursive-named-facade/entry.js');
+      const nodePath = getTestReference(module);
+      const definition = ReactResolver.resolveRootComponentDefinition(nodePath, module, resolveModule);
+
+      expect(T.isVariableDeclarator(definition.binding.path)).toBe(true);
+      expect(T.isArrowFunctionExpression(definition.binding.path.node.init)).toBe(true);
+      expect(T.isJSXElement(definition.binding.path.node.init.body)).toBe(true);
+    });
+
   });
 
 });
