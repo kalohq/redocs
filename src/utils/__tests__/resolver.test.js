@@ -2,8 +2,8 @@
 import expect from 'expect';
 import * as Babylon from 'babylon';
 import traverse from 'babel-traverse';
-import fs from 'fs';
-import path from 'path';
+import FS from 'fs';
+import Path from 'path';
 import * as T from 'babel-types';
 
 import * as Resolver from '../resolver';
@@ -20,9 +20,9 @@ function parseModule(moduleSource) {
 }
 
 function resolveModule(contextPath, modulePath) {
-  const {dir} = path.parse(contextPath);
+  const {dir} = Path.parse(contextPath);
   const hasExt = /\.js$/.test(modulePath);
-  const absPath = path.join(dir, modulePath + (hasExt ? '' : '.js'));
+  const absPath = Path.join(dir, modulePath + (hasExt ? '' : '.js'));
   const module = readModule(absPath);
   const ast = parseModule(module);
 
@@ -34,11 +34,11 @@ function resolveModule(contextPath, modulePath) {
 
 function absTestModule(module) {
   // TODO: Is there a better way to resolve the source test? (problem atm is babel transpilation)
-  return path.join(process.cwd(), 'src/utils/__tests__', module);
+  return Path.join(process.cwd(), 'src/utils/__tests__', module);
 }
 
 function readModule(modulePath) {
-  return fs.readFileSync(modulePath, {encoding: 'utf8'});
+  return FS.readFileSync(modulePath, {encoding: 'utf8'});
 }
 
 function getTestReference(testModulePath) {

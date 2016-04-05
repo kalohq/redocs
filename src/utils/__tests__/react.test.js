@@ -2,7 +2,6 @@
 import expect from 'expect';
 import * as Babylon from 'babylon';
 import traverse from 'babel-traverse';
-import * as T from 'babel-types';
 
 import * as ReactUtils from '../react';
 
