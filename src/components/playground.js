@@ -110,7 +110,7 @@ const Fixture = withState(
 const ComponentDocs = ({docs, ...otherProps}) => (
   <Block {...otherProps}>
     <Heading level={4}>Description</Heading>
-    <LongText>{docs.description || 'No component description! :('}</LongText>
+    <LongText>{docs.description || '💩 No component description!'}</LongText>
     <Heading level={4}>Props</Heading>
     <Block component="pre" maxWidth="100%" overflow="auto">
       {JSON.stringify(docs.props, null, 2)}

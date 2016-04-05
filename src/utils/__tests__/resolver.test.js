@@ -140,13 +140,9 @@ describe('utils/resolver', () => {
       expect(definition.binding.path.node.init.value).toBe('I\'m here!');
     });
 
-  });
+    // TODO: Need test case/s for import/export namespacing. Eg. `import * as React from 'react';`
 
-  describe('resolveRootComponentDefinition', () => {
-
-    it('should resolve our component correctly', () => {
-      expect(true).toBe(true);
-    });
+    // TODO: Need test case/s for combined imports/exports. Eg. import {surrounding, Definition, padded} from 'module';
 
   });
 

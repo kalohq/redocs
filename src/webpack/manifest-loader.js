@@ -5,6 +5,8 @@ import traverse from 'babel-traverse';
 import fs from 'fs';
 import generate from 'babel-generator';
 
+// TODO: Implement using new resolution of component definitions
+
 function loadManifest(originalSource) {
   const callback = this.async();
 
@@ -68,8 +70,9 @@ function loadManifest(originalSource) {
   resolveComponent(componentPath, (resolveErr, resolvedComponentPath) => {
     fs.readFile(resolvedComponentPath, (readErr, fileBuffer) => {
       try {
-        // TODO: May be worth writing a modern version of docgen which uses a babel-tree?
+        // TODO: May be worth writing a modern version of docgen which uses a babel-tree/babel-traverse?
         // SEE: https://github.com/reactjs/react-docgen/issues/68
+        // TODO: Seems redocs fails with imported props :( https://github.com/reactjs/react-docgen/issues/63
         const docs = ReactDocgen.parse(fileBuffer.toString());
         const newProperty = t.objectProperty(t.stringLiteral('docs'), t.stringLiteral(JSON.stringify(docs, null, 2)));
         manifest.node.declaration.properties.push(newProperty);
