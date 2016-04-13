@@ -1,3 +1,9 @@
+<p>&nbsp;</p>
+<p align="center">
+<img src="http://i.imgur.com/A2NoKEN.png" width="300px" />
+</p>
+<p>&nbsp;</p>
+
 Redocs
 ======
 
