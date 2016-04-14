@@ -1,8 +1,8 @@
 import React from 'react';
-import {getDisplayName} from '../utils/runtime/react';
+import {getDisplayName} from '../../utils/runtime/react';
 import {Flex, Block, Inline} from './core';
 import {rgb} from 'jsxstyle';
-import {escape} from 'lodash';
+import {escape, map} from 'lodash';
 import {withState} from 'recompose';
 
 const TRANSPARENT_BG = 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAIElEQVQYV2NkYGCQZMAEz9GFGIeIQix+wfQgyDODXSEANN4FiOUn0M8AAAAASUVORK5CYII=) repeat'; // eslint-disable-line max-len
@@ -40,8 +40,8 @@ const Fixtures = ({fixtures, ...otherProps}) => (
 
 /** Render a large section heading */
 const SectionHeading = ({children, permalink, ...otherProps}) => (
-  <Flex padding="15px 30px" alignItems="center" background={rgb(26, 158, 214)} id={permalink} {...otherProps}>
-    <Heading level={2} color={rgb(255, 255, 255)}>
+  <Flex padding="15px 30px" alignItems="center" background={rgb(245, 245, 245)} id={permalink} {...otherProps}>
+    <Heading level={2}>
       <Link href={`#${permalink}`} textDecoration="none">
         {children}
       </Link>
@@ -58,7 +58,7 @@ const SectionBody = ({children, ...otherProps}) => (
 
 /** Render a details panel within a section */
 const SectionDetails = ({children, ...otherProps}) => (
-  <Block borderLeft="1px solid" borderLeftColor={rgb(230, 232, 240)} {...otherProps}>
+  <Block borderLeft="1px solid" borderLeftColor={rgb(216, 216, 216)} {...otherProps}>
     {children}
   </Block>
 );
@@ -84,7 +84,7 @@ const _Fixture = ({fixture: {component: FixtureComponent, src, description}, set
       </Block>
     </Flex>
     {mode === 'preview' ? (
-      <Flex alignItems="center" justifyContent="center" background={TRANSPARENT_BG} padding={30}>
+      <Flex alignItems="center" justifyContent="center" background={TRANSPARENT_BG} padding={30} overflow="auto">
         <FixtureComponent />
       </Flex>
     ) : (
@@ -105,6 +105,24 @@ const Fixture = withState(
   _Fixture
 );
 
+/** Render documentation for a single prop */
+const PropDoc = ({prop, name, ...otherProps}) => (
+  <Block {...otherProps}>
+    <Heading level={5}>
+      {name}: {prop.type.raw} {prop.required ? '(required)' : ''}
+    </Heading>
+    {prop.description ? (
+      <Text>{prop.description}</Text>
+    ) : null}
+  </Block>
+);
+
+/** Render documentation for component props */
+const PropsDocs = ({props, ...otherProps}) => (
+  <Block {...otherProps}>
+    {map(props, (prop, key) => <PropDoc key={key} name={key} prop={prop} marginBottom={15} />)}
+  </Block>
+);
 
 /** Render documentation for a component */
 const ComponentDocs = ({docs, ...otherProps}) => (
@@ -112,9 +130,7 @@ const ComponentDocs = ({docs, ...otherProps}) => (
     <Heading level={4}>Description</Heading>
     <LongText>{docs.description || '💩 No component description!'}</LongText>
     <Heading level={4}>Props</Heading>
-    <Block component="pre" maxWidth="100%" overflow="auto">
-      {JSON.stringify(docs.props, null, 2)}
-    </Block>
+    <PropsDocs props={docs.props} />
   </Block>
 );
 
@@ -125,10 +141,10 @@ const Component = ({manifest, ...otherProps}) => (
       {getDisplayName(manifest.component)}
     </SectionHeading>
     <SectionBody>
-      <Block flex={3} padding={30}>
+      <Block flex={1} padding={30} overflow="hidden">
         <Fixtures fixtures={manifest.fixtures} />
       </Block>
-      <SectionDetails flex={1} padding={30}>
+      <SectionDetails maxWidth={420} minWidth={320} padding={30}>
         <ComponentDocs docs={manifest.docs} />
       </SectionDetails>
     </SectionBody>

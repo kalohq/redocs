@@ -2,7 +2,7 @@
   "name": "redocs",
   "version": "0.0.0",
   "description": "Powerful documentation utilities for React",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "eslint examples/** src/**",
     "test": "npm run lint && mocha lib/**/*.test.js",

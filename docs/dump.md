@@ -49,8 +49,19 @@ Place to save crazy ideas for future of redocs and all related stuff.
 - I remember iconic framework doing a lot of cool stuff with their framework/devtools
 - One of the biggest selling points of redocs came when updating the underlying (root) primitive components across our app.
   - Nightmare to trawl through and find any potential visual regressions
+  - +1 when updating `MenuItem` - 30 use cases using different variations of props! What if I could see a breakdown of that usage?
+  - Was able to write a few quick fixtures to make sense of churned style props which are difficult to visualise otherwise
 - Some pragmas and docblocks might aid in some edge cases?
-
+- Generate default (missing) fixture/s from prop types
+- Imagine seeing an intelligent component diff
+  - X,Y and Z components have been updated, prop A, B & C have been changed
+- Someone start integrating (dunno what scope) with Atom Editor plsssss
+- See usages (with relative stats) of props and be able to click through to usages
+  - USer configured details - can we launch to their editor/github of choice?
+- Provide the per-component play tools we've seen in other tools (extrapolate possible prop values and allow realtime user editing)
+- Props/Components
+  - See breakdown of component usage (what props actually are used and values)
+  - Search components by prop usage (great for refactoring)
 
 ### Alternatives
 
@@ -94,3 +105,15 @@ So looking back at "alternatives"
 - babel/plugin-handbook to understand how we parse and traverse code - https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#toc-visitors
 - estree spec for node types - https://github.com/estree/estree
 - Further understanding of babel tree traversal (especially nicely organised path methods) - https://github.com/babel/babel/tree/master/packages/babel-traverse/src
+
+
+### More summaries
+
+Engine to understand your component ecosystem.
+
+Features are
+- utilities for extraction
+- pipeline for extraction
+- framework for powering developer tools
+
+Goal: To bring a new level of understanding to our component ecosystem and power next-generation developer tools.
